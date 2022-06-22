@@ -15,7 +15,6 @@ class App extends Component {
     ],
     filter: '',
   };
-
   addContact = ({ id, name, number }) => {
     const contact = {
       id,
@@ -25,6 +24,7 @@ class App extends Component {
     this.setState(prevState => ({
       contacts: [contact, ...prevState.contacts],
     }));
+    console.log(this.state.contacts);
   };
   deleteContact = id => {
     this.setState(prevState => ({
