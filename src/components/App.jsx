@@ -3,7 +3,6 @@ import Section from './Section/Section';
 import InputForm from './InputForm/InputForm';
 import Contacts from './Contacts/Contacts';
 import Filter from './Filter/Filter';
-import { thisExpression } from '@babel/types';
 
 class App extends Component {
   state = {
@@ -24,7 +23,6 @@ class App extends Component {
     this.setState(prevState => ({
       contacts: [contact, ...prevState.contacts],
     }));
-    console.log(this.state.contacts);
   };
   deleteContact = id => {
     this.setState(prevState => ({
