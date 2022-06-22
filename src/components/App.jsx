@@ -2,6 +2,8 @@ import { Component } from 'react';
 import Section from './Section/Section';
 import InputForm from './InputForm/InputForm';
 import Contacts from './Contacts/Contacts';
+import Filter from './Filter/Filter';
+import { thisExpression } from '@babel/types';
 
 class App extends Component {
   state = {
@@ -12,52 +14,49 @@ class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  formSubmitHandler = data => {
-    this.setState({ contacts: { data } });
-    console.log(this.state);
+  addContact = ({ id, name, number }) => {
+    const contact = {
+      id,
+      name,
+      number,
+    };
+    this.setState(prevState => ({
+      contacts: [contact, ...prevState.contacts],
+    }));
   };
-  filteredContacts = value => {
-    const lowerCase = value.toLowerCase();
-
-    return this.state.contacts
-      .filter(contact => {
-        return contact.name.toLowerCase().includes(lowerCase);
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
+  deleteContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
   };
-  contactDelete = id => {
-    this.setState(prevState => {
-      const { contacts } = prevState;
-      const contactsAfterDelete = contacts.filter(contact => contact.id !== id);
-      return { contacts: [...contactsAfterDelete] };
+  changeFilter = e => {
+    this.setState({ filter: e.currentTarget.value });
+  };
+  filteredContacts = () => {
+    const { filter, contacts } = this.state;
+    const lowerCase = filter.toLowerCase();
+    return contacts.filter(contact => {
+      return contact.name.toLowerCase().includes(lowerCase);
     });
   };
 
   render() {
-    console.log(this.state);
     return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 16,
-          color: '#010101',
-        }}
-      >
+      <>
         <Section title="PhoneBook">
-          <InputForm onSubmit={this.formSubmitHandler} />
+          <InputForm onSubmit={this.addContact} />
         </Section>
+
         <Section title="Contacts">
-          <Contacts data={this.formSubmitHandler} />
+          <Filter filter={this.filter} onChange={this.changeFilter} />
+          <Contacts
+            contacts={this.filteredContacts()}
+            onDeleteContact={this.deleteContact}
+          />
         </Section>
-      </div>
+      </>
     );
   }
 }

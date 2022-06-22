@@ -1,19 +1,18 @@
+import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
-
 import React from 'react';
 import styles from './InputForm.module.css';
 
 class InputForm extends React.Component {
   state = {
+    id: nanoid(),
     name: '',
     number: '',
   };
-  nameId = nanoid();
-  numberId = nanoid();
 
   handleInputChange = e => {
     const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
+    return this.setState({ [name]: value });
   };
   handleFormSubmit = e => {
     e.preventDefault();
@@ -21,7 +20,7 @@ class InputForm extends React.Component {
     this.resetForm();
   };
   resetForm = () => {
-    this.setState({ name: '', number: '' });
+    this.setState({ id: '', name: '', number: '' });
   };
   render() {
     return (
@@ -34,7 +33,7 @@ class InputForm extends React.Component {
             name="name"
             value={this.state.name}
             onChange={this.handleInputChange}
-            id={this.nameId}
+            id={this.id}
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
@@ -66,4 +65,5 @@ class InputForm extends React.Component {
     );
   }
 }
+InputForm.propTypes = { onSubmit: PropTypes.func.isRequired };
 export default InputForm;
